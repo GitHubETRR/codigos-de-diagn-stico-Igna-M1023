@@ -66,6 +66,9 @@ dkms.conf
 # Local History for Visual Studio Code
 .history/
 
+test/
+Extra-2025/Juego2024.c
+
 # Built Visual Studio Code Extensions
 *.vsix
 
