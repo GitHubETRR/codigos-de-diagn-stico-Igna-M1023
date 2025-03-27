@@ -16,10 +16,11 @@ int main() {
 }
 
 
-union flag{
+/* union flag{
     struct flags{
         unsigned int bit0:1;
         unsigned int bit1:1;
     }var;
-    
+    unsigned int value;
 }
+*/
