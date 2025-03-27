@@ -18,6 +18,7 @@ int stock = 0;
 
 void AnadirAuto(void);
 void MostrarAutos(void);
+void VenderAuto(void);
 int menu(void);
 
 ////////////////////////////////////////////////////////////////////////
@@ -35,7 +36,8 @@ int menu(void) {
         printf("Bienvenido, En este momento tenemos %d autos en stock\n", stock);
         printf("1. Agregar auto (requiere contrasena)\n");
         printf("2. Mostrar autos\n");
-        printf("3. Salir\n");
+        printf("3. Vender auto\n");
+        printf("4. Salir\n");
         printf("Seleccione una opcion: ");
         scanf("%d", &option);
 
@@ -53,6 +55,9 @@ int menu(void) {
                 MostrarAutos();
                 break;
             case 3:
+                VenderAuto();
+                break;
+            case 4:
                 printf("Saliendo del programa.\n");
                 break;
             default:
@@ -91,6 +96,12 @@ void MostrarAutos(void){
             printf("Modelo: %s\n", Autos[i].modelo);
             printf("Kilometros: %d\n", Autos[i].kilometros);
             printf("Precio: %.2f\n", Autos[i].precio);
+            if(Autos[i].estado.vendido == 0){
+                printf("Estado: En stock\n");
+            }
+            else{
+                printf("Estado: Vendido\n");
+            }
             if(i != stock-1){
                 printf("Desea mostrar el siguiente? 1-Si 2-No\n");
                 scanf("%d", &opcion);
@@ -102,3 +113,18 @@ void MostrarAutos(void){
         }
     } while (opcion != 2);
 }
+
+
+/*
+void VenderAuto(void){
+    int i;
+    printf("Ingrese el numero de auto que desea vender: ");
+    scanf("%d", &i);
+    if(i < 1 || i > stock){
+        printf("Numero de auto invalido\n");
+        return;
+    }
+    Autos[i-1].estado.vendido = 1;
+    printf("Auto vendido exitosamente\n");
+}
+*/
