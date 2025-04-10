@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h> // For system()
-#include <string.h> // For strcat()
-#include <sys/stat.h> // For mkdir()
-#include <sys/types.h> // For mode_t
+#include <stdlib.h> 
+#include <string.h> 
+#include <sys/stat.h> 
+#include <sys/types.h>
 
 typedef enum{
     INGRESAR=1,
@@ -57,7 +57,7 @@ void crearnota(){
         mkdir("./Notas"); 
     }
 
-    printf("Ingrese el nombre de la nota (sin extension): ");
+    printf("Ingrese el nombre (sin extension): ");
     scanf("%s", nombre);
 
     strcat(ruta, nombre);
