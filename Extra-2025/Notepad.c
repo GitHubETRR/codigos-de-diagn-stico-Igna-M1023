@@ -13,6 +13,7 @@ typedef enum{
     SALIR
 }opciones_t;
 void crearnota(void);
+void editarnota(void);
 void mostrar(void);
 void menu(void);
 
@@ -38,6 +39,7 @@ void menu (void){
                 crearnota();
                 break;
             case MOSTRAR:
+                editarnota();
                 break;
             case ELIMINAR:
                 break;
@@ -51,8 +53,7 @@ void crearnota(){
     FILE *fp;
     char nombre[50];
     char ruta[100] = "./Notas/"; 
-    char abs_ruta[_MAX_PATH];  // Buffer for absolute path
-    int opcion;
+    char abs_ruta[_MAX_PATH]; 
 
     struct stat st = {0};
     if (stat("./Notas", &st) == -1) {
@@ -77,8 +78,33 @@ void crearnota(){
     }
     fclose(fp);
     printf("Nota '%s' creada exitosamente en './Notas'.\n", nombre);
+}
 
-    printf("Desea editar la nota?\n");
+void editarnota(){
+    char nombre[50];
+    char ruta[100] = "./Notas/"; 
+    char abs_ruta[_MAX_PATH]; 
+    int opcion;
+    struct stat st = {0};
+    if (stat("./Notas", &st) == -1) {
+        printf("Primero crea una nota!\n");
+    }
+
+    printf("Introduzca el nombre de la nota: ");
+    scanf("%s", nombre);
+    strcat(ruta, nombre);
+    strcat(ruta, ".txt");
+
+    if (stat(ruta, &st) == -1) {
+        printf("La nota '%s' no existe\n", nombre);
+        return;
+    }
+
+    if (_fullpath(abs_ruta, ruta, _MAX_PATH) == NULL) {
+        printf("Error obteniendo ruta absoluta\n");
+        return;
+    }
+
     printf("1. Usar Notepad\n");
     printf("2. Usar otro programa\n");
     printf("3. No editar\n");
