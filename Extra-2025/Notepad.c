@@ -1,8 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h> 
-#include <string.h> 
-#include <sys/stat.h> 
-#include <sys/types.h>
+#include <stdio.h>     // P
+#include <windows.h>
+#include <stdlib.h>    // S
+#include <string.h>    // ST
+#include <sys/stat.h>  // MK
+#include <sys/types.h> // M
 
 typedef enum{
     INGRESAR=1,
@@ -50,6 +51,7 @@ void crearnota(){
     FILE *fp;
     char nombre[50];
     char ruta[100] = "./Notas/"; 
+    char abs_ruta[_MAX_PATH];  // Buffer for absolute path
     int opcion;
 
     struct stat st = {0};
@@ -63,6 +65,11 @@ void crearnota(){
     strcat(ruta, nombre);
     strcat(ruta, ".txt");
 
+    if (_fullpath(abs_ruta, ruta, _MAX_PATH) == NULL) {
+        printf("Error obteniendo ruta absoluta\n");
+        return;
+    }
+    
     fp = fopen(ruta, "w");
     if (fp == NULL) {
         printf("Error al crear la nota.\n");
@@ -79,8 +86,8 @@ void crearnota(){
     scanf("%d", &opcion);
 
     switch (opcion) {
-        case 1:
-            printf("...\n");
+        case 1: 
+            system(abs_ruta); //  ruta completa y no relativa
             break;
         case 2:
             printf("...\n");
