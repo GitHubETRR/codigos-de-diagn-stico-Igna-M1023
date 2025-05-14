@@ -4,6 +4,9 @@
 #include <string.h>    // ST
 #include <sys/stat.h>  // MK
 #include <sys/types.h> // M
+#include <dirent.h> // 
+#include <unistd.h> 
+#define WAIT 2 
 
 typedef enum{
     INGRESAR=1,
@@ -14,7 +17,8 @@ typedef enum{
 }opciones_t;
 void crearnota(void);
 void editarnota(void);
-void mostrar(void);
+void mostrarnotas(void);
+void eliminarnota(void);
 void menu(void);
 
 //
@@ -25,6 +29,7 @@ int main(void){
 }
 
 void menu (void){
+    system("cls");
     opciones_t op;
     do{
         printf("Menu\n");
@@ -39,17 +44,20 @@ void menu (void){
                 crearnota();
                 break;
             case MOSTRAR:
-                editarnota();
+                mostrarnotas();
                 break;
             case ELIMINAR:
+                eliminarnota();
                 break;
             case EDITAR:
+                editarnota();
                 break;
         }   
     }while(op!=SALIR);
 }
 
 void crearnota(){
+    system("cls");
     FILE *fp;
     char nombre[50];
     char ruta[100] = "./Notas/"; 
@@ -78,9 +86,12 @@ void crearnota(){
     }
     fclose(fp);
     printf("Nota '%s' creada exitosamente en './Notas'.\n", nombre);
+    sleep(WAIT);
+    system("cls");
 }
 
 void editarnota(){
+    system("cls");
     char nombre[50];
     char ruta[100] = "./Notas/"; 
     char abs_ruta[_MAX_PATH]; 
@@ -104,10 +115,8 @@ void editarnota(){
         printf("Error obteniendo ruta absoluta\n");
         return;
     }
-
     printf("1. Usar Notepad\n");
     printf("2. Usar otro programa\n");
-    printf("3. No editar\n");
     printf("Seleccione una opcion: ");
     scanf("%d", &opcion);
 
@@ -118,11 +127,71 @@ void editarnota(){
         case 2:
             printf("...\n");
             break;
-        case 3:
-            printf("...\n");
-            break;
         default:
             printf("Opcion invalida.\n");
             break;
     }
+    system("cls");
+}
+
+void mostrarnotas() {
+    char c;
+    system("cls");
+    struct stat st = {0};
+    if (stat("./Notas", &st) == -1) {
+        printf("Primero crea una nota!\n");
+        return;
+    }
+
+    DIR *dir;
+    struct dirent *entry;
+
+    dir = opendir("./Notas");
+    if (dir == NULL) {
+        printf("Error al abrir el directorio './Notas'.\n");
+        return;
+    }
+
+    printf("Notas disponibles:\n");
+    int found = 0;
+    while ((entry = readdir(dir)) != NULL) {
+        if (strstr(entry->d_name, ".txt") != NULL) { // si el archivo termina en .txt
+            printf("- %s\n", entry->d_name);
+            found = 1;
+        }
+    }
+
+    closedir(dir);
+
+    if (!found) {
+        printf("No hay notas disponibles.\n");
+    }
+    printf("Presione cualquier tecla para continuar...\n");
+    c = getchar();
+    while (getchar() != '\n');
+    system("cls");
+}
+
+void eliminarnota(){
+    system("cls");
+    char nombre[50];
+    char ruta[100] = "./Notas/"; 
+    struct stat st = {0};
+    if (stat("./Notas", &st) == -1) {
+        printf("Primero crea una nota!\n");
+        return;
+    }
+
+    printf("Introduzca el nombre de la nota: ");
+    scanf("%s", nombre);
+    strcat(ruta, nombre);
+    strcat(ruta, ".txt");
+
+    if (remove(ruta) == 0) {
+        printf("Nota '%s' eliminada exitosamente.\n", nombre);
+    } else {
+        printf("Error al eliminar la nota '%s'.\n", nombre);
+    }
+    sleep(WAIT);
+    system("cls");
 }
