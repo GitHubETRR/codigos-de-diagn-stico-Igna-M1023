@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h> 
+#define WAIT 3
 #define MAX_AUTOS 100
 #define PASSWORD "admin123"
 
@@ -18,7 +20,7 @@ int stock = 0;
 
 void AnadirAuto(void);
 void MostrarAutos(void);
-void VenderAuto(void);
+//void VenderAuto(void);
 int menu(void);
 
 ////////////////////////////////////////////////////////////////////////
@@ -55,7 +57,7 @@ int menu(void) {
                 MostrarAutos();
                 break;
             case 3:
-                VenderAuto();
+                // VenderAuto();
                 break;
             case 4:
                 printf("Saliendo del programa.\n");
@@ -63,8 +65,7 @@ int menu(void) {
             default:
                 printf("Opción no válida.\n");
         }
-    } while (option != 2);
-
+    } while (option != 4);
     return 0;
 }
 
@@ -85,33 +86,38 @@ void AnadirAuto(void) {
 
     stock++;
     printf("Auto agregado exitosamente. Ahora hay %d autos en stock.\n", stock);
+    sleep(WAIT);
+    system("cls");
 }
 
 void MostrarAutos(void){
     int opcion;
-    do{
-        for(int i = 0; i < stock; i++){
-            printf("Auto %d\n", i+1);
-            printf("Marca: %s\n", Autos[i].marca);
-            printf("Modelo: %s\n", Autos[i].modelo);
-            printf("Kilometros: %d\n", Autos[i].kilometros);
-            printf("Precio: %.2f\n", Autos[i].precio);
-            if(Autos[i].estado.vendido == 0){
-                printf("Estado: En stock\n");
+    if(stock == 0){
+        printf("No se encontraron autos en stock.");
+        sleep(WAIT);
+        system("cls");
+    }
+    else{
+        int i = 0;
+        do{
+            for(; i < stock; i++){
+                printf("Auto %d\n", i+1);
+                printf("Marca: %s\n", Autos[i].marca);
+                printf("Modelo: %s\n", Autos[i].modelo);
+                printf("Kilometros: %d\n", Autos[i].kilometros);
+                printf("Precio: %.2f\n", Autos[i].precio);
+                if(Autos[i].estado.vendido == 0){
+                    printf("Estado: En stock\n");
+                }
+                else{
+                    printf("Estado: Vendido\n");
+                }
             }
-            else{
-                printf("Estado: Vendido\n");
-            }
-            if(i != stock-1){
-                printf("Desea mostrar el siguiente? 1-Si 2-No\n");
-                scanf("%d", &opcion);
-            }
-            else{
-                printf("No hay mas autos para mostrar\n");
-                opcion = 2;
-            }
-        }
-    } while (opcion != 2);
+        } while (stock > i);
+        printf("No hay mas autos para mostrar\n");
+        sleep(WAIT);
+        system("cls");
+    }
 }
 
 

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h> 
+#define WAIT 2 
 #define MAX_NUM 10
 #define MAX_CHAR 64
 
@@ -79,8 +81,8 @@ void imprimir_contacto(contacto_t *contacto) {
 }
 
 void ingresar() {
-    //system("cls")
-    system("clear");
+    system("cls"); // windows
+    // system("clear"); linux
     contacto_t *contacto_ptr = (contacto_t *)malloc(sizeof(contacto_t));
     if (contacto_ptr == NULL) {
         printf("Out of Memory");
@@ -103,13 +105,13 @@ void ingresar() {
         contacto_ptr->next = _EQUIPO;
         _EQUIPO = contacto_ptr;
     }
-    //system("cls")
-    system("clear");
+    system("cls"); // windows<
+    // system("clear"); linux
 }
 
 void mostrar(){
-    //system("cls")
-    system("clear");
+    system("cls"); // windows
+    // system("clear"); linux
     
     contacto_t *current = _EQUIPO;
     if (current == NULL) {
@@ -189,8 +191,12 @@ void llamar() {
 
     if (current == NULL) {
         printf("No se encontro el contacto.\n");
+        sleep(WAIT);
+        system("cls");
         return;
     }
 
     printf("Llamando a %s...\n", current->nombre);
+    sleep(WAIT);
+    system("cls");
 }
