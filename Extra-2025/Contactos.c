@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_NUM 12
+#define MAX_NUM 10
 #define MAX_CHAR 64
 
 void menu();
@@ -36,6 +36,7 @@ int main(void) {
 }
 
 void menu() {
+    int opcion_temp;
     opciones_t op;
     do {
         printf("Menu\n");
@@ -45,7 +46,9 @@ void menu() {
         printf("4_Eliminar un contacto\n");
         printf("5_Editar un contacto\n");
         printf("6_Salir\n");
-        scanf("%d", &op);
+        scanf("%d", &opcion_temp);
+        op = (opciones_t)opcion_temp;
+        while (getchar() != '\n'); // limpiar buffer
         switch (op) {
             case LLAMAR:
                 llamar();
@@ -69,13 +72,15 @@ void menu() {
 void imprimir_contacto(contacto_t *contacto) {
     printf("\n--------------------\n");
     printf("Nombre: %s\n", contacto->nombre);
-    printf("Numero de celular: %d\n", contacto->numerocel);
-    printf("Numero de linea: %d\n", contacto->numerolinea);
+    printf("Numero de celular (+54): %d\n", contacto->numerocel);
+    printf("Numero de linea (+54): %d\n", contacto->numerolinea);
     printf("Descripcion: %s\n", contacto->descripcion);
     printf("\n--------------------\n");
 }
 
 void ingresar() {
+    //system("cls")
+    system("clear");
     contacto_t *contacto_ptr = (contacto_t *)malloc(sizeof(contacto_t));
     if (contacto_ptr == NULL) {
         printf("Out of Memory");
@@ -98,9 +103,14 @@ void ingresar() {
         contacto_ptr->next = _EQUIPO;
         _EQUIPO = contacto_ptr;
     }
+    //system("cls")
+    system("clear");
 }
 
-void mostrar() {
+void mostrar(){
+    //system("cls")
+    system("clear");
+    
     contacto_t *current = _EQUIPO;
     if (current == NULL) {
         printf("No hay contactos para mostrar.\n");
