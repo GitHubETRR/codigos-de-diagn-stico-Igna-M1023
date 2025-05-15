@@ -15,7 +15,7 @@ void ImpCont(struct contacto *c) {
 }
 
 int main() {
-    struct contact *c1 = malloc(sizeof(struct contact));
+    struct contacto *c1 = malloc(sizeof(struct contacto));
     if (c1 == NULL) {
         printf("Out Of Memory.\n");
         return 1;
@@ -25,7 +25,7 @@ int main() {
     c1->nombre[strcspn(c1->nombre, "\n")] = 0;  
     printf("Introduzca el numero de telefono: ");
     fgets(c1->celular, sizeof(c1->celular), stdin);
-    c1->celuksr[strcspn(c1->celular, "\n")] = 0;  
+    c1->celular[strcspn(c1->celular, "\n")] = 0;  
     ImpCont(c1);
     free(c1);
     return 0;
