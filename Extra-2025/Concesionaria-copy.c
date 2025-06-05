@@ -16,26 +16,26 @@ typedef struct {
     } estado;
 } Auto;
 Auto Autos[MAX_AUTOS];
-int stock = 0;
 
-void AnadirAuto(void);
-void MostrarAutos(void);
+void AnadirAuto(int *stock);
+void MostrarAutos(int *stock);
 //void VenderAuto(void);
-int menu(void);
+int menu(int *stock);
 
 ////////////////////////////////////////////////////////////////////////
 
 int main(void) {
-    menu();
+    int stock = 0;
+    menu(&stock);
     return 0;
 }
 
-int menu(void) {
+int menu(int *stock) {
     int option;
     char password[20];
 
     do {
-        printf("Bienvenido, En este momento tenemos %d autos en stock\n", stock);
+        printf("Bienvenido, En este momento tenemos %d autos en stock\n", *stock);
         printf("1. Agregar auto (requiere contrasena)\n");
         printf("2. Mostrar autos\n");
         printf("3. Vender auto\n");
@@ -48,16 +48,16 @@ int menu(void) {
                 printf("Ingrese la contrasena: ");
                 scanf("%s", password);
                 if (strcmp(password, PASSWORD) == 0) {
-                    AnadirAuto();
+                    AnadirAuto(stock);
                 } else {
                     printf("Contrasena incorrecta.\n");
                 }
                 break;
             case 2:
-                MostrarAutos();
+                MostrarAutos(stock);
                 break;
             case 3:
-                // VenderAuto();
+                // VenderAuto(stock);
                 break;
             case 4:
                 printf("Saliendo del programa.\n");
@@ -69,51 +69,48 @@ int menu(void) {
     return 0;
 }
 
-void AnadirAuto(void) {
-    if (stock >= MAX_AUTOS) {
+void AnadirAuto(int *stock) {
+    if (*stock >= MAX_AUTOS) {
         printf("No se pueden agregar más autos, el stock está lleno.\n");
         return;
     }
 
     printf("Ingrese la marca del auto: ");
-    scanf("%s", Autos[stock].marca);
+    scanf("%s", Autos[*stock].marca);
     printf("Ingrese el modelo del auto: ");
-    scanf("%s", Autos[stock].modelo);
+    scanf("%s", Autos[*stock].modelo);
     printf("Ingrese los kilometros del auto: ");
-    scanf("%d", &Autos[stock].kilometros);
+    scanf("%d", &Autos[*stock].kilometros);
     printf("Ingrese el precio del auto: ");
-    scanf("%f", &Autos[stock].precio);
+    scanf("%f", &Autos[*stock].precio);
 
-    stock++;
-    printf("Auto agregado exitosamente. Ahora hay %d autos en stock.\n", stock);
+    Autos[*stock].estado.vendido = 0;
+    (*stock)++;
+    printf("Auto agregado exitosamente. Ahora hay %d autos en stock.\n", *stock);
     sleep(WAIT);
     system("cls");
 }
 
-void MostrarAutos(void){
-    int opcion;
-    if(stock == 0){
+void MostrarAutos(int *stock){
+    if(*stock == 0){
         printf("No se encontraron autos en stock.");
         sleep(WAIT);
         system("cls");
     }
     else{
-        int i = 0;
-        do{
-            for(; i < stock; i++){
-                printf("Auto %d\n", i+1);
-                printf("Marca: %s\n", Autos[i].marca);
-                printf("Modelo: %s\n", Autos[i].modelo);
-                printf("Kilometros: %d\n", Autos[i].kilometros);
-                printf("Precio: %.2f\n", Autos[i].precio);
-                if(Autos[i].estado.vendido == 0){
-                    printf("Estado: En stock\n");
-                }
-                else{
-                    printf("Estado: Vendido\n");
-                }
+        for(int i = 0; i < *stock; i++){
+            printf("Auto %d\n", i+1);
+            printf("Marca: %s\n", Autos[i].marca);
+            printf("Modelo: %s\n", Autos[i].modelo);
+            printf("Kilometros: %d\n", Autos[i].kilometros);
+            printf("Precio: %.2f\n", Autos[i].precio);
+            if(Autos[i].estado.vendido == 0){
+                printf("Estado: En stock\n");
             }
-        } while (stock > i);
+            else{
+                printf("Estado: Vendido\n");
+            }
+        }
         printf("No hay mas autos para mostrar\n");
         sleep(WAIT);
         system("cls");
