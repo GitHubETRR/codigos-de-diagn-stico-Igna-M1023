@@ -7,7 +7,7 @@
 
 typedef struct {
     char marca[50];
-    char modelo[50];
+    char modelo[50];        
     int kilometros;
     float precio;
     union {
