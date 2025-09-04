@@ -36,6 +36,8 @@ class stock {
 
 void NuevoIngreso(vector<stock>& lista, int& proximoId);
 void MostrarIngresos(const vector<stock>& lista);
+void EditarIngreso(vector<stock>& lista);
+void EliminarIngreso(vector<stock>& lista);
 void menu(vector<stock>& lista, int& proximoId);
 
 
@@ -67,8 +69,14 @@ void menu(vector<stock>& lista, int& proximoId) {
             case NINGRESO:
                 NuevoIngreso(lista, proximoId);
                 break;
+            case EDITARE:
+                EditarIngreso(lista);
+                break;
             case MINGRESO:
                 MostrarIngresos(lista);
+                break;
+            case EINGRESO:
+                EliminarIngreso(lista);
                 break;
             case SALIR:
                 break;
@@ -145,4 +153,67 @@ void MostrarIngresos(const vector<stock>& lista) {
             cin.get();
         }
     }
+}
+
+void EditarIngreso(vector<stock>& lista) {
+    if (lista.empty()) {
+        cout << "\nNo hay ingresos para editar.\n";
+        return;
+    }
+
+    int idBuscar;
+    cout << "\n--- Editar Estado de Ingreso ---\n";
+    cout << "Ingrese el ID del ingreso a editar: ";
+    cin >> idBuscar;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (size_t i = 0; i < lista.size(); ++i) {
+        if (lista[i].id == idBuscar) {
+            cout << "Ingreso encontrado:\n";
+            lista[i].mostrar();
+
+            string nuevoEstado;
+            cout << "Ingrese el nuevo estado: ";
+            getline(cin, nuevoEstado);
+            lista[i].estado  = nuevoEstado;
+
+            cout << "Estado actualizado con exito.\n";
+            return;
+        }
+    }
+    cout << "No se encontro un ingreso con el ID proporcionado.\n";
+}
+
+void EliminarIngreso(vector<stock>& lista) {
+    if (lista.empty()) {
+        cout << "\nNo hay ingresos para eliminar.\n";
+        return;
+    }
+
+    int idBuscar;
+    cout << "\n--- Eliminar Ingreso ---\n";
+    cout << "Ingrese el ID del ingreso a eliminar: ";
+    cin >> idBuscar;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    for (size_t i = 0; i < lista.size(); ++i) {
+        if (lista[i].id == idBuscar) {
+            cout << "Ingreso encontrado:\n";
+            lista[i].mostrar();
+
+            char confirmacion;
+            cout << "Esta seguro que desea eliminar este ingreso? (s/n): ";
+            cin >> confirmacion;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            if (confirmacion == 's' || confirmacion == 'S') {
+                lista.erase(lista.begin() + i); 
+                cout << "Ingreso eliminado con exito.\n";
+            } else {
+                cout << "Eliminacion cancelada.\n";
+            }
+            return;
+        }
+    }
+    cout << "No se encontro un ingreso con el ID proporcionado.\n";
 }
