@@ -24,12 +24,14 @@ class Movimiento(customtkinter.CTkFrame):
         self.monto.grid(row=2, column=0, padx=10, pady=10, sticky="w")
         self.montoi = customtkinter.CTkEntry(self, placeholder_text="Monto de la transaccion")
         self.montoi.grid(row=2, column=1, padx=10, pady=10, sticky="ew")
-        self.origen = customtkinter.CTkLabel(self, text="Monto", fg_color="transparent")
+        self.origen = customtkinter.CTkLabel(self, text="Origen", fg_color="transparent")
         self.origen.grid(row=3, column=0, padx=10, pady=10, sticky="w")
-        self.origeni = customtkinter.CTkEntry(self, placeholder_text="Monto de la transaccion")
+        self.origeni = customtkinter.CTkEntry(self, placeholder_text="Origen de la transaccion")
         self.origeni.grid(row=3, column=1, padx=10, pady=10, sticky="ew")
-        self.atras_button = customtkinter.CTkButton(self, text="Atrás", command=atras)
-        self.atras_button.grid(row=4, column=0, columnspan=2, pady=20, padx=10)
+        self.add_button = customtkinter.CTkButton(self, text="Añadir", corner_radius=0)
+        self.add_button.grid(row=4, column=0, columnspan=2, pady=10, padx=10)
+        self.atras_button = customtkinter.CTkButton(self, text="Atrás", command=atras, corner_radius=0)
+        self.atras_button.grid(row=5, column=0, columnspan=2, pady=10, padx=10)
 
 class MenuPrincipal(customtkinter.CTkFrame):
     def __init__(self, master, addmovimiento):
@@ -51,7 +53,7 @@ class MenuPrincipal(customtkinter.CTkFrame):
         movimientos_label = customtkinter.CTkLabel(left_panel, text="Movimientos", font=customtkinter.CTkFont(size=16, weight="bold"))
         movimientos_label.grid(row=0, column=0, padx=10, pady=(0, 5), sticky="w")
 
-        add_movimiento_button = customtkinter.CTkButton(left_panel, text="+",  width=30, height=30, command=addmovimiento)
+        add_movimiento_button = customtkinter.CTkButton(left_panel, text="+",  width=30, height=30, corner_radius=0, command=addmovimiento)
         add_movimiento_button.grid(row=0, column=1, padx=(0, 10), pady=(0, 5), sticky="e")
 
         left_scrollable_frame = customtkinter.CTkScrollableFrame(left_panel)
@@ -130,7 +132,7 @@ class App(customtkinter.CTk):
         self.passwordi = customtkinter.CTkEntry(self.login, placeholder_text="Contraseña123", show="*")
         self.passwordi.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
 
-        self.enter = customtkinter.CTkButton(self.login, text="Ingresar", command=self.button_callback)
+        self.enter = customtkinter.CTkButton(self.login, text="Ingresar", corner_radius=0, command=self.button_callback)
         self.enter.grid(row=2, column=0, columnspan=2, padx=10, pady=20, sticky="ew")
     
     def mostrarmenuprincipal(self):
