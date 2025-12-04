@@ -3,6 +3,7 @@
 #include <vector>
 #include <limits>
 #include <iomanip> 
+#include <fstream>
 using namespace std;
 
 class stock {
@@ -26,7 +27,7 @@ class stock {
         }
         void mostrar() const{
             cout << "---------------------------------\n";
-            cout << "ID de Ingreso: " << id << "\n";
+            cout << "Id de ingreso: " << id << "\n";
             cout << "Cliente:       " << obtenerCliente() << "\n";
             cout << "Producto:      " << tipoproducto << "\n";
             cout << "Estado:        " << estado << "\n";
@@ -39,7 +40,8 @@ void MostrarIngresos(const vector<stock>& lista);
 void EditarIngreso(vector<stock>& lista);
 void EliminarIngreso(vector<stock>& lista);
 void menu(vector<stock>& lista, int& proximoId);
-
+void GuardarArchivo(const vector<stock>& lista, const string& filename);
+void CargarArchivo(vector<stock>& lista, int& proximoId, const string& filename);
 
 typedef enum {
     NINGRESO = 1,
@@ -68,16 +70,21 @@ void menu(vector<stock>& lista, int& proximoId) {
         switch (op) {
             case NINGRESO:
                 NuevoIngreso(lista, proximoId);
+                GuardarArchivo(lista, "servicio_db.txt");
                 break;
             case EDITARE:
                 EditarIngreso(lista);
+                GuardarArchivo(lista, "servicio_db.txt");
                 break;
             case MINGRESO:
                 MostrarIngresos(lista);
                 break;
             case EINGRESO:
                 EliminarIngreso(lista);
+                GuardarArchivo(lista, "servicio_db.txt");
                 break;
+            case MSTOCK:
+            
             case SALIR:
                 break;
         }
@@ -89,7 +96,9 @@ int main() {
     vector<stock> listaDeStock; 
     int proximoId = 1;
     cout << "Bienvenido al programa de gestion\n";  
+    CargarArchivo(listaDeStock, proximoId, "servicio_db.txt");
     menu(listaDeStock, proximoId);
+    GuardarArchivo(listaDeStock, "servicio_db.txt"); // ************* GUARDAR AL SALIR *************
     return 0;
 }
 
@@ -216,4 +225,59 @@ void EliminarIngreso(vector<stock>& lista) {
         }
     }
     cout << "No se encontro un ingreso con el ID proporcionado.\n";
+}
+
+void GuardarArchivo(const vector<stock>& lista, const string& filename) {
+    // Abrir/crear el archivo para escritura, truncando su contenido si existe
+    ofstream out(filename, ios::out | ios::trunc);
+    // Si no se pudo abrir el archivo, salir de la función
+    if (!out) return;
+    // Recorrer cada elemento de la lista de stock
+    for (const stock &s : lista) {
+        // Escribir el id seguido de un salto de línea
+        out << s.id << '\n';
+        // Escribir el nombre del cliente seguido de un salto de línea
+        out << s.obtenerCliente() << '\n';
+        // Escribir el tipo de producto seguido de un salto de línea
+        out << s.tipoproducto << '\n';
+        // Escribir el estado seguido de un salto de línea
+        out << s.estado << '\n';
+        // Escribir la descripción seguida de un salto de línea
+        out << s.descripcion << '\n';
+    }
+}
+
+void CargarArchivo(vector<stock>& lista, int& proximoId, const string& filename) {
+    // Abrir el archivo para lectura
+    ifstream in(filename);
+    // Si no existe o no se puede abrir, salir (no es error)
+    if (!in) return;
+    // Vaciar la lista actual antes de cargar
+    lista.clear();
+    // Reiniciar el siguiente id por defecto
+    proximoId = 1;
+    // Variables temporales para leer las 5 líneas de cada registro
+    string idLine, cliente, tipo, estado, descripcion;
+    // Leer bloques de 5 líneas hasta el final del archivo
+    while (getline(in, idLine)) {
+        // Leer la línea del cliente; si falla, salir del bucle
+        if (!getline(in, cliente)) break;
+        // Leer la línea del tipo de producto; si falla, salir
+        if (!getline(in, tipo)) break;
+        // Leer la línea del estado; si falla, salir
+        if (!getline(in, estado)) break;
+        // Leer la línea de la descripción; si falla, salir
+        if (!getline(in, descripcion)) break;
+        // Intentar convertir la primera línea (id) a entero
+        int id = 0;
+        try { id = stoi(idLine); } catch(...) { continue; }
+        // Construir un objeto stock con los datos leídos
+        stock s(id, cliente, tipo, descripcion);
+        // Asignar el estado leído (sobrescribe el default 'Registrado')
+        s.estado = estado;
+        // Añadir el objeto a la lista
+        lista.push_back(s);
+        // Actualizar proximoId para no repetir ids (mantener el mayor + 1)
+        if (id >= proximoId) proximoId = id + 1;
+    }
 }

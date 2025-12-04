@@ -1,37 +1,37 @@
 from tkinter import *
 from tkinter import filedialog as fd
 root = Tk()
-root.current_file = None
+root.arch_act = None
 root.geometry("500x300")
 root.title(" Notepad ")
 
-def savef():
-    if getattr(root, 'current_file', None):  # check if it exists
-        with open(root.current_file, "w", encoding="utf-8") as file:
-            file.write(inputtxt.get(1.0, END))
+def guardarf():
+    if getattr(root, 'arch_act', None): 
+        with open(root.arch_act, "w", encoding="utf-8") as file:
+            file.write(texto_i.get(1.0, END))
     else:
-        savefile = fd.asksaveasfilename(defaultextension=".txt", filetypes=[("Archivos de texto", "*.txt")])
-        with open(savefile, "w", encoding="utf-8") as file:
-            file.write(inputtxt.get(1.0, END))
+        archivo_g = fd.asksaveasfilename(defaultextension=".txt", filetypes=[("Archivos de texto", "*.txt")])
+        with open(archivo_g, "w", encoding="utf-8") as file:
+            file.write(texto_i.get(1.0, END))
         
-def openf():
-    filename = fd.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])
-    with open(filename, "r", encoding="utf-8") as file:
-        contenido = file.read()
-    inputtxt.delete(1.0, END)
-    inputtxt.insert(END, contenido)
-    root.current_file = filename 
-    return root.current_file
+def abrirf():
+    archivo = fd.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])
+    with open(archivo, "r", encoding="utf-8") as archivor:
+        contenido = archivor.read()
+    texto_i.delete(1.0, END)
+    texto_i.insert(END, contenido)
+    root.arch_act = archivo
+    return root.arch_act
 
-topbar = Frame(root)
-topbar.pack(side=TOP, fill=X)
+barra_t = Frame(root)
+barra_t.pack(side=TOP, fill=X)
 
-btn = Button(topbar, text="Abrir", command=openf)
-btn.pack(side=LEFT, padx=5, pady=5)
-btn = Button(topbar, text="Guardar", command=savef)
-btn.pack(side=LEFT, padx=5, pady=5)
+abrir_b = Button(barra_t, text="Abrir", command=guardarf)
+abrir_b.pack(side=LEFT, padx=5, pady=5)
+guardar_b = Button(barra_t, text="Guardar", command=guardarf)
+guardar_b.pack(side=LEFT, padx=5, pady=5)
 
-inputtxt = Text(root, height=15, width=60, bg="light yellow")
-inputtxt.pack(fill=BOTH, expand=True, padx=5, pady=(0,5))
+texto_i = Text(root, height=15, width=60, bg="light yellow")
+texto_i.pack(fill=BOTH, expand=True, padx=5, pady=(0,5))
 
 mainloop()

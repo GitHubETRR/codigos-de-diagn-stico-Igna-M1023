@@ -2,6 +2,10 @@ import customtkinter
 import json
 from tkinter import messagebox
 
+
+##https://customtkinter.tomschimansky.com/documentation/
+
+
 file_path = r'C:/6Tel/codigos-de-diagn-stico-Igna-M1023/dbsuperseguro.json'
 
 def button_callback():
